@@ -1,41 +1,32 @@
 #!/usr/bin/python3
-""" empty class Rectangle that defines a rectangle
-"""
+"""class rectangle"""
 
 
 class Rectangle:
-    """ class rectangle"""
+    """class Rectangle"""
+
     def __init__(self, width=0, height=0):
-        """ Instantiation with optional width and height"""
         self.width = width
         self.height = height
 
     @property
     def width(self):
-        """ width
-        """
         return self.__width
-
-    @property
-    def height(self):
-        """ height
-        """
-        return self.__height
 
     @width.setter
     def width(self, value):
-        """ width setter
-        """
         if type(value) is not int:
             raise TypeError("width must be an integer")
         if value < 0:
             raise ValueError("width must be >= 0")
         self.__width = value
 
+    @property
+    def height(self):
+        return self.__height
+
     @height.setter
     def height(self, value):
-        """ height setter
-        """
         if type(value) is not int:
             raise TypeError("height must be an integer")
         if value < 0:
@@ -43,11 +34,27 @@ class Rectangle:
         self.__height = value
 
     def area(self):
-        """ returns rectangle area"""
         return self.__width * self.__height
 
     def perimeter(self):
-        """ returns rectangle perimiter"""
-        if self.__width is 0 or self.__height is 0:
+        if self.__width == 0 or self.__height == 0:
             return 0
-        return self.__width * 2 + self.__height * 2
+        return (self.__width + self.__height) * 2
+
+    def __str__(self):
+        str = ""
+        if (self.__height == 0) or (self.__width == 0):
+            return ("")
+        else:
+            for i in range(self.__height):
+                for j in range(self.__width):
+                    str += "#"
+                if i < self.__height - 1:
+                    str += "\n"
+            return (str)
+
+    def __repr__(self):
+        return ("Rectangle({}, {})".format(self.width, self.height))
+
+    def __del__(self):
+        print("Bye rectangle...")
