@@ -1,15 +1,22 @@
 #!/usr/bin/python3
-"""a Python file similar to model_state.py named
-model_city.py that contains the class definition of a City."""
-from sqlalchemy.orm import declarative_base, relationship
+"""
+Class definition of a City
+"""
+
 from sqlalchemy import Column, Integer, String, ForeignKey
-from sys import argv
-Base = declarative_base()
+from model_state import Base
 
 
 class City(Base):
-    """claas state that inherits from base"""
+    """
+    City class that inherits from Base
+
+    Attributes:
+        id: Id city
+        name: Name of the city
+        state_id: State id
+    """
     __tablename__ = "cities"
-    id = Column(Integer, autoincrement=True, primary_key=True)
+    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     name = Column(String(128), nullable=False)
-    state_id = Column(Integer, ForeignKey("states.id"), nullable=False)
+    state_id = Column(Integer, ForeignKey('states.id'), nullable=False)
