@@ -1,29 +1,28 @@
 #!/usr/bin/python3
-""" Select states with names matching arguments """
-
-
+""" a script that takes in the name of a state
+as an argument and lists all cities of that state"""
+from MySQLdb import connect
 from sys import argv
-import MySQLdb
 
-if __name__ == '__main__':
 
-    db_user = argv[1]
-    db_passwd = argv[2]
-    db_name = argv[3]
-    user_state = argv[4]
-
-    database = MySQLdb.connect(host='localhost',
-                               port=3306,
-                               user=db_user,
-                               passwd=db_passwd,
-                               db=db_name)
-
-    cursor = database.cursor()
-
-    cursor.execute('SELECT cities.name FROM cities\
-                   JOIN states\
-                   ON cities.state_id = states.id\
-                   WHERE states.name = %s\
-                   ORDER BY states.id ASC', (user_state,))
-    result = []
-    print(', '.join([value[0] for value in cursor.fetchall()]))
+if __name__ == "__main__":
+    """conncet to db and run the query then print the result"""
+    db = connect(
+        host="localhost",
+        user=argv[1],
+        password=argv[2],
+        database=argv[3],
+        port=3306
+    )
+    cur = db.cursor()
+    ph1 = "SELECT DISTINCT name FROM cities WHERE state_id IN"
+    ph2 = "(SELECT id FROM states WHERE name = %(statename)s)"
+    cur.execute(ph1 + " " + ph2, {'statename': argv[4]})
+    res = cur.fetchall()
+    ch = ""
+    if len(res) > 0:
+        for row in res:
+            ch += str(row[0]) + ", "
+        print(ch[:len(ch) - 2])
+    else:
+        print()
