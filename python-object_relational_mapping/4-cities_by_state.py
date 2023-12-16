@@ -1,27 +1,22 @@
 #!/usr/bin/python3
-""" Select states with names matching arguments """
-
+"""a script that lists all cities"""
+from MySQLdb import connect
 from sys import argv
-import MySQLdb
 
-if __name__ == '__main__':
 
-    db_user = argv[1]
-    db_passwd = argv[2]
-    db_name = argv[3]
-
-    database = MySQLdb.connect(host='localhost',
-                               port=3306,
-                               user=db_user,
-                               passwd=db_passwd,
-                               db=db_name)
-
-    cursor = database.cursor()
-
-    cursor.execute('SELECT cities.id, cities.name, states.name FROM cities\
-                   JOIN states\
-                   ON cities.state_id = states.id\
-                   ORDER BY cities.id ASC')
-
-    for row in cursor.fetchall():
+if __name__ == "__main__":
+    """conncet to db and run the query then print the result"""
+    db = connect(
+        host="localhost",
+        user=argv[1],
+        password=argv[2],
+        database=argv[3],
+        port=3306
+    )
+    cur = db.cursor()
+    ph1 = "SELECT cities.id, cities.name, states.name FROM cities"
+    ph2 = "INNER JOIN states ON states.id=cities.state_id ORDER BY id"
+    cur.execute(ph1 + " " + ph2)
+    res = cur.fetchall()
+    for row in res:
         print(row)
